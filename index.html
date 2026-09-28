@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gyankshetra - BPSC TRE Mock Test</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #0b1329; display: flex; justify-content: center; min-height: 100vh; color: #1e293b; }
+    .app-screen { width: 100%; max-width: 412px; background: #0b1329; min-height: 100vh; position: relative; display: flex; flex-direction: column; overflow-x: hidden; }
+    .hidden { display: none !important; }
+
+    /* SCREEN 1: START SCREEN */
+    #start-screen { background: linear-gradient(180deg, #e8f5e9 0%, #f4fbf7 100%); padding: 16px; min-height: 100vh; display: flex; flex-direction: column; }
+    .top-bar-start { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; }
+    .brand-logo-start { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 800; color: #064e28; }
+    
+    .test-card { background: #ffffff; border-radius: 20px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); margin-bottom: 16px; border: 1px solid #e0e0e0; }
+    .tag-badge { display: inline-block; background: #e8f5e9; border: 1px solid #a5d6a7; color: #064e28; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; margin-bottom: 10px; }
+    .test-title { font-size: 20px; font-weight: 800; color: #0c3e1e; margin-bottom: 4px; }
+    .test-subtitle { font-size: 12px; color: #616161; margin-bottom: 16px; }
+
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .metric-box { background: #e8f5e9; border-radius: 12px; padding: 10px 4px; text-align: center; }
+    .m-icon { font-size: 18px; margin-bottom: 4px; }
+    .m-val { font-size: 12px; font-weight: 800; color: #0c3e1e; }
+    .m-lbl { font-size: 9px; color: #55695c; }
+
+    .ins-title { font-size: 15px; font-weight: 800; color: #0c3e1e; margin-bottom: 8px; }
+    .ins-list { list-style: none; font-size: 12px; color: #2e3d32; display: flex; flex-direction: column; gap: 8px; }
+    .ins-list li::before { content: "• "; color: #048848; font-weight: bold; }
+
+    .start-card-bottom { background: #ffffff; border-radius: 20px; padding: 16px; border: 1px solid #e0e0e0; margin-top: auto; text-align: center; }
+    .name-input-group { margin-bottom: 12px; text-align: left; }
+    .name-label { display: block; font-size: 12px; font-weight: 800; color: #0c3e1e; margin-bottom: 6px; }
+    .name-input { width: 100%; padding: 12px; border: 1.5px solid #a5d6a7; border-radius: 10px; font-size: 14px; font-weight: 600; outline: none; }
+    .name-input:focus { border-color: #048848; }
+
+    .btn-start { width: 100%; background: #048848; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+    /* SCREEN 2: QUIZ SCREEN */
+    #quiz-screen { background: #0b1329; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+    .quiz-header { background: #048848; padding: 16px; display: flex; justify-content: space-between; align-items: center; color: white; }
+    .header-logo { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .timer-badge { background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 20px; padding: 4px 12px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+    .sub-bar { background: #e8f5e9; border-radius: 14px; margin: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .sub-bar-title { font-size: 13px; font-weight: 800; color: #048848; }
+    .hamburger-icon { background: #048848; border: none; width: 36px; height: 36px; border-radius: 10px; color: white; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+    .quiz-card { background: white; border-radius: 24px; margin: 0 12px 12px 12px; padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .q-count-text { font-size: 15px; font-weight: 800; color: #048848; margin-bottom: 12px; }
+    .q-title-text { font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.4; margin-bottom: 20px; }
+
+    .options-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .opt-card { border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 14px; cursor: pointer; background: #fff; transition: all 0.2s ease; }
+    .opt-card.selected { border-color: #048848; background: #f0fdf4; font-weight: 800; color: #048848; }
+
+    .opt-main-text { font-size: 14px; font-weight: 700; color: #1e293b; }
+
+    .bottom-nav { margin-top: auto; display: flex; gap: 10px; }
+    .btn-nav-prev { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #cbd5e1; background: white; font-weight: 700; color: #475569; cursor: pointer; text-align: center; }
+    .btn-nav-next { flex: 1.5; padding: 12px; border-radius: 12px; border: none; background: #048848; font-weight: 800; color: white; cursor: pointer; text-align: center; }
+
+    /* PALETTE DRAWER */
+    .palette-drawer { position: absolute; right: 12px; top: 115px; width: 230px; background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); padding: 16px; z-index: 100; display: none; }
+    .palette-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 800; font-size: 14px; }
+    .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
+    .p-node { height: 34px; border: 1px solid #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; cursor: pointer; background: #f8fafc; }
+    .p-node.answered { background: #048848; color: white; border-color: #048848; }
+    .p-node.current { border: 2px solid #048848; color: #048848; background: #e8f5e9; }
+
+    /* SCREEN 3: THANK YOU SCREEN */
+    #thankyou-screen { background: #ffffff; padding: 24px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .party-icon { font-size: 56px; margin-top: 10px; }
+    .thank-title { font-size: 24px; font-weight: 800; color: #048848; margin: 6px 0 2px 0; }
+    .thank-sub { font-size: 13px; color: #64748b; margin-bottom: 18px; }
+    
+    .perf-card { width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 16px; margin-bottom: 16px; text-align: left; }
+    .perf-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: #334155; }
+    .perf-row.highlight { background: #e8f5e9; padding: 6px 10px; border-radius: 8px; border: 1px solid #c8e6c9; }
+    .btn-ai-start { width: 100%; background: #048848; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; }
+
+    /* SCREEN 4: AI DETAILED ANALYSIS */
+    #ai-analysis-screen { background: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; }
+    .ai-header { background: #048848; color: white; padding: 16px; font-weight: 800; font-size: 16px; display: flex; justify-content: space-between; }
+    .page-bar { background: #e8f5e9; padding: 8px 16px; font-size: 12px; font-weight: 800; color: #048848; border-bottom: 1px solid #c8e6c9; }
+    .analysis-list { padding: 12px; flex: 1; overflow-y: auto; }
+    .analysis-card { background: white; border-radius: 16px; padding: 14px; margin-bottom: 12px; border: 1px solid #e2e8f0; }
+    .q-badge { display: inline-block; background: #048848; color: white; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-bottom: 6px; }
+    .ans-lbl { font-size: 12px; font-weight: 700; margin: 2px 0; }
+    .ans-lbl.wrong { color: #dc2626; }
+    .ans-lbl.right { color: #16a34a; }
+    .exp-box { background: #fef9c3; border: 1px solid #fef08a; border-radius: 10px; padding: 8px; font-size: 11px; color: #713f12; margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+  <div class="app-screen">
+
+    <!-- SCREEN 1: START MOCK TEST -->
+    <div id="start-screen">
+      <div class="top-bar-start">
+        <div class="brand-logo-start">🎓 Gyankshetra</div>
+      </div>
+
+      <div class="test-card">
+        <div class="tag-badge">🧪 MOCK TEST • BPSC TRE 4.0</div>
+        <h1 class="test-title">Science & Chemistry Practice</h1>
+        <div class="test-subtitle">Bihar Teacher Recruitment Examination</div>
+
+        <div class="metrics-grid">
+          <div class="metric-box"><div class="m-icon">📋</div><div class="m-val">10 Questions</div><div class="m-lbl">Total MCQs</div></div>
+          <div class="metric-box"><div class="m-icon">⏱</div><div class="m-val">10 Minutes</div><div class="m-lbl">Time Duration</div></div>
+          <div class="metric-box"><div class="m-icon">🎯</div><div class="m-val">10 Marks</div><div class="m-lbl">Negative 1/3</div></div>
+        </div>
+      </div>
+
+      <div class="test-card">
+        <div class="ins-title">📋 Instructions</div>
+        <ul class="ins-list">
+          <li>Kul 10 prashn hain, sahi uttar par +1 mark milega.</li>
+          <li>Galat uttar par 1/3 (0.33) marks kaat liye jayenge.</li>
+          <li>Start Test button dabate hi timer shuru ho jayega.</li>
+        </ul>
+      </div>
+
+      <div class="start-card-bottom">
+        <div class="name-input-group">
+          <label class="name-label" for="user-name-input">Candidate Name / Avedak Ka Naam:</label>
+          <input type="text" id="user-name-input" class="name-input" placeholder="Enter your full name..." autocomplete="off">
+        </div>
+        <button id="btn-start-test" class="btn-start">START TEST ➔</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 2: QUIZ SCREEN -->
+    <div id="quiz-screen" class="hidden">
+      <div class="quiz-header">
+        <div class="header-logo">🎓 Gyankshetra</div>
+        <div class="timer-badge">⏱ <span id="timer-display">10:00</span></div>
+      </div>
+
+      <div class="sub-bar">
+        <span class="sub-bar-title" id="display-candidate-name">Candidate: Guest</span>
+        <button id="btn-palette-toggle" class="hamburger-icon">☰</button>
+      </div>
+
+      <div class="quiz-card">
+        <div class="q-count-text" id="q-number-title">Q1 of 10</div>
+        <div class="q-title-text" id="q-question-text">Loading...</div>
+
+        <div class="options-container" id="options-container"></div>
+
+        <div class="bottom-nav">
+          <button id="btn-prev-q" class="btn-nav-prev">Previous</button>
+          <button id="btn-next-q" class="btn-nav-next">Next ➔</button>
+        </div>
+      </div>
+
+      <!-- PALETTE DRAWER -->
+      <div class="palette-drawer" id="palette-drawer">
+        <div class="palette-header">
+          <span>Question Palette</span>
+          <span id="btn-palette-close" style="cursor:pointer;">✕</span>
+        </div>
+        <div class="palette-grid" id="palette-grid"></div>
+        <button id="btn-palette-submit" class="btn-start" style="padding: 10px; font-size: 13px;">✔ Submit Test</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: THANK YOU SCREEN -->
+    <div id="thankyou-screen" class="hidden">
+      <div class="party-icon">🎉</div>
+      <h1 class="thank-title">Result Summary</h1>
+      <div class="thank-sub">Test Submitted Successfully</div>
+
+      <div class="perf-card">
+        <div class="perf-row highlight"><span>Candidate Name:</span><span id="res-candidate-name" style="color:#048848;">-</span></div>
+        <div class="perf-row"><span>Total Questions:</span><span>10</span></div>
+        <div class="perf-row"><span>Attempted:</span><span id="res-attempted">0</span></div>
+        <div class="perf-row"><span>Correct Answers (+1):</span><span id="res-correct" style="color:#16a34a;">0</span></div>
+        <div class="perf-row"><span>Wrong Answers (-0.33):</span><span id="res-wrong" style="color:#dc2626;">0</span></div>
+        <div class="perf-row highlight"><span>Final Score:</span><span id="res-score" style="color:#048848; font-weight:800;">0 / 10</span></div>
+        <div class="perf-row"><span>Your Rank:</span><span id="res-rank" style="color:#d97706; font-weight:800;">-</span></div>
+        <div class="perf-row" style="border-top: 1px dashed #cbd5e1; padding-top: 8px; margin-top: 4px;"><span>🏆 Topper:</span><span id="res-topper" style="color:#048848;">Rohan Sharma (9.67 Marks)</span></div>
+      </div>
+
+      <button id="btn-ai-continue" class="btn-ai-start">CONTINUE TO AI ANALYSIS ➔</button>
+    </div>
+
+    <!-- SCREEN 4: AI DETAILED ANALYSIS SCREEN -->
+    <div id="ai-analysis-screen" class="hidden">
+      <div class="ai-header">
+        <span>🤖 AI Detailed Analysis</span>
+        <span style="font-size: 12px; background: #fef08a; color: #854d0e; padding: 2px 8px; border-radius: 8px;">Smart Review</span>
+      </div>
+
+      <div class="page-bar" id="ai-page-indicator">Page 1 of 2</div>
+
+      <div class="analysis-list" id="ai-questions-container"></div>
+
+      <div style="padding: 12px; background: white; display: flex; gap: 10px;">
+        <button id="btn-ai-prev" class="btn-nav-prev">← PREV PAGE</button>
+        <button id="btn-ai-next" class="btn-nav-next">NEXT PAGE ➔</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const questionsData = [
+        { q: "Which of the following is the smallest structural and functional unit of life?", options: ["A. Tissue", "B. Cell", "C. Organ", "D. Organ System", "E. Not Attempted"], correct: 1, exp: "Cell is the basic structural and functional unit of all living organisms." },
+        { q: "What is the pH value of pure water at 25°C?", options: ["A. 0", "B. 7", "C. 14", "D. 5", "E. Not Attempted"], correct: 1, exp: "Pure water is neutral and has a pH value of 7." },
+        { q: "Which gas is evolved when Zinc reacts with Dilute Hydrochloric Acid?", options: ["A. Oxygen", "B. Carbon Dioxide", "C. Hydrogen", "D. Nitrogen", "E. Not Attempted"], correct: 2, exp: "Metal + Acid → Salt + Hydrogen Gas (H2)." },
+        { q: "What is the chemical formula of Rust?", options: ["A. Fe2O3.xH2O", "B. FeO", "C. Fe3O4", "D. FeSO4", "E. Not Attempted"], correct: 0, exp: "Rust is hydrated Iron(III) oxide." },
+        { q: "Which of the following is an Endothermic Reaction?", options: ["A. Respiration", "B. Photosynthesis", "C. Combustion of Coal", "D. Slaking of Lime", "E. Not Attempted"], correct: 1, exp: "Photosynthesis absorbs sunlight energy, so it is endothermic." },
+        { q: "Process of coating iron with a thin layer of Zinc is called?", options: ["A. Anodizing", "B. Galvanization", "C. Electroplating", "D. Alloying", "E. Not Attempted"], correct: 1, exp: "Galvanization prevents iron from rusting." },
+        { q: "Which acid is present in Tamarind (Imli)?", options: ["A. Lactic Acid", "B. Oxalic Acid", "C. Tartaric Acid", "D. Citric Acid", "E. Not Attempted"], correct: 2, exp: "Tamarind contains Tartaric Acid." },
+        { q: "Which element is common to all acids?", options: ["A. Hydrogen", "B. Oxygen", "C. Chlorine", "D. Sulfur", "E. Not Attempted"], correct: 0, exp: "All acids release Hydrogen ions (H+) in water." },
+        { q: "SI unit of Power of Lens is?", options: ["A. Meter", "B. Watt", "C. Diopter", "D. Joule", "E. Not Attempted"], correct: 2, exp: "Power of a lens is measured in Diopters (D)." },
+        { q: "Powerhouse of the cell is known as?", options: ["A. Ribosome", "B. Nucleus", "C. Mitochondria", "D. Golgi Body", "E. Not Attempted"], correct: 2, exp: "Mitochondria generates ATP energy for cellular functions." }
+      ];
+
+      let candidateName = "Student";
+      let currentQ = 0;
+      let userAnswers = new Array(10).fill(null);
+      let timerInterval = null;
+      let timeLeft = 600;
+
+      let currentAIPage = 1;
+      const questionsPerPage = 5;
+
+      // Event Listeners
+      document.getElementById('btn-start-test').addEventListener('click', startTest);
+      document.getElementById('btn-prev-q').addEventListener('click', prevQuestion);
+      document.getElementById('btn-next-q').addEventListener('click', nextQuestion);
+      document.getElementById('btn-palette-toggle').addEventListener('click', togglePalette);
+      document.getElementById('btn-palette-close').addEventListener('click', togglePalette);
+      document.getElementById('btn-palette-submit').addEventListener('click', submitTest);
+      document.getElementById('btn-ai-continue').addEventListener('click', startAIAnalysis);
+      document.getElementById('btn-ai-prev').addEventListener('click', prevAIPage);
+      document.getElementById('btn-ai-next').addEventListener('click', nextAIPage);
+
+      function gotoScreen(id) {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('thankyou-screen').classList.add('hidden');
+        document.getElementById('ai-analysis-screen').classList.add('hidden');
+
+        document.getElementById(id).classList.remove('hidden');
+        window.scrollTo(0, 0);
+      }
+
+      function startTest() {
+        const inputVal = document.getElementById('user-name-input').value.trim();
+        if(!inputVal) {
+          alert("Kripya apna naam darj karein / Please enter your name.");
+          return;
+        }
+        candidateName = inputVal;
+        document.getElementById('display-candidate-name').innerText = `Candidate: ${candidateName}`;
+
+        gotoScreen('quiz-screen');
+        currentQ = 0;
+        startTimer();
+        renderQuestion();
+        renderPalette();
+      }
+
+      function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = 600;
+        updateTimerUI();
+
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          updateTimerUI();
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert("Time is up! Submitting test automatically.");
+            submitTest();
+          }
+        }, 1000);
+      }
+
+      function updateTimerUI() {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById('timer-display').innerText = 
+          `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      }
+
+      function renderQuestion() {
+        const q = questionsData[currentQ];
+        document.getElementById('q-number-title').innerText = `Q${currentQ + 1} of 10`;
+        document.getElementById('q-question-text').innerText = `Q${currentQ + 1}. ${q.q}`;
+
+        const optionsDiv = document.getElementById('options-container');
+        optionsDiv.innerHTML = '';
+
+        q.options.forEach((optText, index) => {
+          const optCard = document.createElement('div');
+          optCard.className = 'opt-card';
+
+          // Selection styling without showing correct/incorrect answer
+          if (userAnswers[currentQ] === index) {
+            optCard.classList.add('selected');
+            optCard.innerHTML = `<div class="opt-main-text">🔘 ${optText}</div>`;
+          } else {
+            optCard.innerHTML = `<div class="opt-main-text">⚪ ${optText}</div>`;
+          }
+
+          optCard.addEventListener('click', () => selectOption(index));
+          optionsDiv.appendChild(optCard);
+        });
+
+        const nextBtn = document.getElementById('btn-next-q');
+        if (currentQ === questionsData.length - 1) {
+          nextBtn.innerText = "Submit Test ✔";
+        } else {
+          nextBtn.innerText = "Next ➔";
+        }
+
+        renderPalette();
+      }
+
+      function selectOption(index) {
+        userAnswers[currentQ] = index;
+        renderQuestion();
+      }
+
+      function nextQuestion() {
+        if (currentQ < questionsData.length - 1) {
+          currentQ++;
+          renderQuestion();
+        } else {
+          submitTest();
+        }
+      }
+
+      function prevQuestion() {
+        if (currentQ > 0) {
+          currentQ--;
+          renderQuestion();
+        }
+      }
+
+      function togglePalette() {
+        const p = document.getElementById('palette-drawer');
+        p.style.display = (p.style.display === 'block') ? 'none' : 'block';
+      }
+
+      function renderPalette() {
+        const grid = document.getElementById('palette-grid');
+        grid.innerHTML = '';
+
+        for (let i = 0; i < 10; i++) {
+          const node = document.createElement('div');
+          node.className = 'p-node';
+          if (userAnswers[i] !== null) node.classList.add('answered');
+          if (i === currentQ) node.classList.add('current');
+          node.innerText = i + 1;
+          node.addEventListener('click', () => {
+            currentQ = i;
+            renderQuestion();
+            togglePalette();
+          });
+          grid.appendChild(node);
+        }
+      }
+
+      function submitTest() {
+        clearInterval(timerInterval);
+        
+        let attempted = 0;
+        let correct = 0;
+        let wrong = 0;
+
+        userAnswers.forEach((ans, idx) => {
+          if (ans !== null) {
+            attempted++;
+            if (ans === questionsData[idx].correct) {
+              correct++;
+            } else {
+              wrong++;
+            }
+          }
+        });
+
+        // 1/3 Negative Marking Calculation
+        const rawScore = (correct * 1) - (wrong * 0.3333);
+        const finalScore = Math.max(0, rawScore).toFixed(2);
+
+        // Rank Calculation (Simulated)
+        let rank = "1st Rank";
+        if (finalScore < 9.67 && finalScore >= 8) rank = "2nd Rank";
+        else if (finalScore < 8 && finalScore >= 6) rank = "5th Rank";
+        else if (finalScore < 6 && finalScore >= 4) rank = "12th Rank";
+        else if (finalScore < 4) rank = "25th Rank";
+
+        document.getElementById('res-candidate-name').innerText = candidateName;
+        document.getElementById('res-attempted').innerText = attempted;
+        document.getElementById('res-correct').innerText = correct;
+        document.getElementById('res-wrong').innerText = wrong;
+        document.getElementById('res-score').innerText = `${finalScore} / 10`;
+        document.getElementById('res-rank').innerText = rank;
+        document.getElementById('res-topper').innerText = "Rohan Sharma (9.67 Marks)";
+
+        gotoScreen('thankyou-screen');
+      }
+
+      function startAIAnalysis() {
+        currentAIPage = 1;
+        renderAIPage();
+        gotoScreen('ai-analysis-screen');
+      }
+
+      function renderAIPage() {
+        const container = document.getElementById('ai-questions-container');
+        container.innerHTML = '';
+
+        const startIndex = (currentAIPage - 1) * questionsPerPage;
+        const endIndex = Math.min(startIndex + questionsPerPage, questionsData.length);
+        const totalPages = Math.ceil(questionsData.length / questionsPerPage);
+
+        document.getElementById('ai-page-indicator').innerText = `Page ${currentAIPage} of ${totalPages}`;
+
+        for (let i = startIndex; i < endIndex; i++) {
+          const item = questionsData[i];
+          const userSelection = userAnswers[i];
+          const isRight = userSelection === item.correct;
+
+          const card = document.createElement('div');
+          card.className = 'analysis-card';
+          card.innerHTML = `
+            <span class="q-badge">Q${i + 1}</span>
+            <div style="font-size: 13px; font-weight: 800; margin-bottom: 6px;">${item.q}</div>
+            <div class="ans-lbl ${isRight ? 'right' : 'wrong'}">Your Answer: ${userSelection !== null ? item.options[userSelection] : 'Not Attempted'}</div>
+            <div class="ans-lbl right">Correct Answer: ${item.options[item.correct]}</div>
+            <div class="exp-box">💡 <strong>Explanation:</strong> ${item.exp}</div>
+          `;
+          container.appendChild(card);
+        }
+
+        document.getElementById('btn-ai-prev').style.visibility = (currentAIPage === 1) ? 'hidden' : 'visible';
+        const nextBtn = document.getElementById('btn-ai-next');
+        if (currentAIPage === totalPages) {
+          nextBtn.innerText = "FINISH TO HOME 🏠";
+        } else {
+          nextBtn.innerText = "NEXT PAGE ➔";
+        }
+        window.scrollTo(0, 0);
+      }
+
+      function nextAIPage() {
+        const totalPages = Math.ceil(questionsData.length / questionsPerPage);
+        if (currentAIPage < totalPages) {
+          currentAIPage++;
+          renderAIPage();
+        } else {
+          gotoScreen('start-screen');
+        }
+      }
+
+      function prevAIPage() {
+        if (currentAIPage > 1) {
+          currentAIPage--;
+          renderAIPage();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
